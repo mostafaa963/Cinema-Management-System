@@ -1,0 +1,123 @@
+﻿<div class="container-fluid px-4">
+    <h1 class="mt-4">Cinema Management</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Home">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/Admin/Cinema">Cinemas</a></li>
+        <li class="breadcrumb-item active">Create New</li>
+    </ol>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
+                    <div class="fw-bold"><i class="fas fa-user-plus me-2"></i>Register New Cinema</div>
+                    <a href="/Admin/Cinema" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-4 border-end text-center">
+                                <div class="mb-3">
+                                         <label class="form-label fw-bold d-block">Profile Preview</label>
+                                                 <div id="imagePreviewContainer" class="bg-light d-flex align-items-center justify-content-center mx-auto rounded-circle shadow-sm" style="width: 150px; height: 150px; border: 2px dashed #dee2e6; overflow: hidden;">
+                                                 <i id="placeholderIcon" class="fas fa-user-tie fa-4x text-muted"></i>
+                                           <img id="imgPreview" src="#" alt="Preview" class="d-none w-100 h-100" style="object-fit: cover;" />
+                                     </div>
+                                </div>
+
+                                @* <div class="mb-3">
+                                    <label class="form-label fw-bold d-block">Profile Preview</label>
+                                    <div class="bg-light d-flex align-items-center justify-content-center mx-auto rounded-circle shadow-sm" style="width: 150px; height: 150px; border: 2px dashed #dee2e6;">
+                                        <i class="fas fa-user-tie fa-4x text-muted"></i>
+                                    </div>
+                                </div> *@
+                                <div class="mb-3 px-3">
+                                    <input type="file" class="form-control form-control-sm" name="logo" id="ProfilePicture">
+                                    <div class="form-text small">Upload JPG or PNG (Max 2MB)</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="Name" class="form-label fw-bold">Full Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-id-card text-primary"></i></span>
+                                            <input type="text" class="form-control" id="Name" name="CinemaName" placeholder="e.g. Leonardo DiCaprio" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="Nationality" class="form-label fw-bold">Location</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-globe-americas text-success"></i></span>
+                                            <input type="text" class="form-control" id="Nationality" name="Location" placeholder="e.g. British">
+                                        </div>
+                                    </div>
+
+                                    @* <div class="col-md-6">
+                                        <label for="MovieID" class="form-label fw-bold">Featured Movie ID</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-film text-warning"></i></span>
+                                            <input type="number" class="form-control" id="MovieID" name="MovieID" placeholder="0001">
+                                        </div>
+                                    </div> *@
+
+                                    <div class="col-12 mt-4">
+                                        <div class="form-check form-switch custom-switch">
+                                            <input class="form-check-input" type="checkbox" id="Status" name="Status" value="true" checked>
+                                            <label class="form-check-label fw-bold" for="Status">Active Status</label>
+                                        </div>
+                                        <small class="text-muted">Inactive cinemas will not appear in public search results.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="reset" class="btn btn-light border px-4">Reset</button>
+                            <button type="submit" class="btn btn-primary px-5 shadow">
+                                <i class="fas fa-save me-1"></i> Save Cinema
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Styling for the form enhancements */
+    .card { border-radius: 15px; }
+    .card-header { border-radius: 15px 15px 0 0 !important; }
+    .input-group-text { border-right: 0; color: #495057; }
+    .input-group .form-control { border-left: 0; }
+    .input-group .form-control:focus { border-color: #ced4da; box-shadow: none; }
+    .custom-switch .form-check-input { width: 3em; height: 1.5em; cursor: pointer; }
+</style>
+<script>
+    document.getElementById('ProfilePicture').onchange = function (evt) {
+        const [file] = this.files;
+        if (file) {
+            const imgPreview = document.getElementById('imgPreview');
+            const placeholderIcon = document.getElementById('placeholderIcon');
+            
+            // Create a temporary URL for the selected file
+            imgPreview.src = URL.createObjectURL(file);
+            
+            // Show the image and hide the icon
+            imgPreview.classList.remove('d-none');
+            placeholderIcon.classList.add('d-none');
+        }
+    };
+
+    // Optional: Reset preview if the form is reset
+    document.querySelector('button[type="reset"]').onclick = function() {
+        document.getElementById('imgPreview').classList.add('d-none');
+        document.getElementById('placeholderIcon').classList.remove('d-none');
+    };
+</script>

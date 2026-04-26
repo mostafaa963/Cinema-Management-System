@@ -1,0 +1,193 @@
+﻿@model CountEntityVM
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    
+    // Calculate totals for dynamic progress bars
+    var totalEntries = Model.CountCategory + Model.CountActors + Model.CountMovies + Model.CountCinema;
+    double getPercent(int count) => totalEntries > 0 ? Math.Round((double)count / totalEntries * 100) : 0;
+}
+
+<div class="container-fluid px-4">
+    @* --- DASHBOARD HEADER --- *@
+    <div class="row mb-4 align-items-center py-4 border-bottom bg-white sticky-top" style="z-index: 1020;">
+        <div class="col-md-6">
+            <h2 class="fw-bold text-dark mb-0">
+                <i class="bi bi-speedometer2 me-2 text-primary"></i>Management Overview
+            </h2>
+            <p class="text-muted small mb-0">Real-time statistics for your cinema ecosystem.</p>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <button onclick="window.location.reload()" class="btn btn-outline-secondary btn-sm rounded-pill">
+                <i class="bi bi-arrow-clockwise me-1"></i> Refresh Data
+            </button>
+        </div>
+    </div>
+
+    @* --- METRIC CARDS --- *@
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 border-start border-primary border-4 metric-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1 small">Categories</div>
+                        <i class="bi bi-tags-fill fs-4 text-primary opacity-25"></i>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-dark">@Model.CountCategory</div>
+                    <a href="/Admin/Category" class="text-decoration-none x-small mt-2 d-block text-muted">
+                        Manage genres <i class="bi bi-chevron-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 border-start border-success border-4 metric-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1 small">Talent Pool</div>
+                        <i class="bi bi-people-fill fs-4 text-success opacity-25"></i>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-dark">@Model.CountActors</div>
+                    <a href="/Admin/Actor" class="text-decoration-none x-small mt-2 d-block text-muted">
+                        View actors <i class="bi bi-chevron-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 border-start border-warning border-4 metric-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1 small">Active Movies</div>
+                        <i class="bi bi-film fs-4 text-warning opacity-25"></i>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-dark">@Model.CountMovies</div>
+                    <a href="/Admin/Movie/Index" class="text-decoration-none x-small mt-2 d-block text-muted">
+                        Browse catalog <i class="bi bi-chevron-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 border-start border-danger border-4 metric-card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1 small">Locations</div>
+                        <i class="bi bi-building fs-4 text-danger opacity-25"></i>
+                    </div>
+                    <div class="h3 mb-0 fw-bold text-dark">@Model.CountCinema</div>
+                    <a href="/Admin/Cinema/Index" class="text-decoration-none x-small mt-2 d-block text-muted">
+                        Check branches <i class="bi bi-chevron-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* --- CHARTS SECTION --- *@
+    <div class="row">
+        @* Doughnut Chart Container *@
+        <div class="col-lg-5 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-bottom-0 py-3 fw-bold">
+                    <i class="bi bi-pie-chart-fill me-2 text-primary"></i>Database Composition
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height:300px; width:100%">
+                        <canvas id="myDoughnutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* Resource Distribution Container *@
+        <div class="col-lg-7 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-bottom-0 py-3 fw-bold">
+                    <i class="bi bi-bar-chart-line-fill me-2 text-primary"></i>Resource Distribution
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h4 class="small fw-bold text-muted">Categories <span class="float-end">@getPercent(Model.CountCategory)%</span></h4>
+                        <div class="progress rounded-pill" style="height: 8px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: @getPercent(Model.CountCategory)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="small fw-bold text-muted">Actors <span class="float-end">@getPercent(Model.CountActors)%</span></h4>
+                        <div class="progress rounded-pill" style="height: 8px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: @getPercent(Model.CountActors)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="small fw-bold text-muted">Movies <span class="float-end">@getPercent(Model.CountMovies)%</span></h4>
+                        <div class="progress rounded-pill" style="height: 8px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: @getPercent(Model.CountMovies)%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="small fw-bold text-muted">Cinema Locations <span class="float-end">@getPercent(Model.CountCinema)%</span></h4>
+                        <div class="progress rounded-pill" style="height: 8px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: @getPercent(Model.CountCinema)%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5 p-3 bg-light rounded text-center small text-muted">
+                        <i class="bi bi-info-circle me-1"></i> Total system entries tracked: <strong>@totalEntries</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .metric-card { transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; }
+    .metric-card:hover { transform: translateY(-3px); box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important; }
+    .x-small { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .sticky-top { box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+</style>
+
+@section Scripts {
+    @* We only load Chart.js here if it's not already in your _Layout.cshtml *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var ctx = document.getElementById("myDoughnutChart");
+            if (ctx) {
+                var myDoughnutChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ["Categories", "Actors", "Movies", "Cinema"],
+                        datasets: [{
+                            data: [@Model.CountCategory, @Model.CountActors, @Model.CountMovies, @Model.CountCinema],
+                            backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545'],
+                            hoverOffset: 10,
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }],
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        cutoutPercentage: 70,
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                fontColor: '#6c757d'
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

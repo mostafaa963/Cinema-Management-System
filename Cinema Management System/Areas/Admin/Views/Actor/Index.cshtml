@@ -1,0 +1,198 @@
+﻿@model ActorWithRelatedVM
+
+<div class="container-fluid px-4">
+    @* --- HEADER --- *@
+    <div class="row mb-4 align-items-center py-4 border-bottom bg-white sticky-top" style="z-index: 1020;">
+        <div class="col-md-6">
+            <h2 class="fw-bold text-dark mb-0">
+                <i class="bi bi-people-fill me-2 text-primary"></i>Actor Management
+            </h2>
+            <p class="text-muted small mb-0">Browse, filter, and manage your talent database.</p>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <a href="/Admin/Actor/Create" class="btn btn-primary shadow-sm px-4 rounded-pill">
+                <i class="bi bi-plus-lg me-1"></i> Add New Actor
+            </a>
+        </div>
+    </div>
+
+    @* --- FILTER SECTION --- *@
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body bg-light rounded">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <label class="form-label small fw-bold text-uppercase text-muted">Search Actors</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0"
+                               placeholder="Search by name or nationality..."
+                               name="query" value="@ViewBag.Query">
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-dark px-4 flex-grow-1">
+                        <i class="bi bi-filter me-1"></i> Filter Results
+                    </button>
+                    <a href="/Admin/Actor/Index" class="btn btn-outline-secondary" title="Reset">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @* --- DATA TABLE --- *@
+    <div class="card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-muted small text-uppercase">
+                    <tr>
+                        <th class="ps-4" style="width: 80px;">ID</th>
+                        <th>Actor Details</th>
+                        <th>Nationality</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Actors.Any())
+                    {
+                        foreach (var item in Model.Actors)
+                        {
+                            <tr>
+                                <td class="ps-4 text-muted">#@item.ID</td>
+                                <td>
+                                    <div class="fw-bold text-dark">@item.Name</div>
+                                    <span class="badge bg-light text-dark border fw-normal" style="font-size: 0.7rem;">REF: @item.ID</span>
+                                </td>
+                                <td>
+                                    <span class="text-secondary"><i class="bi bi-globe me-1"></i> @item.Nationality</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 rounded-pill">
+                                        Active
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group shadow-sm">
+                                        <a href="/Admin/Actor/Update/@item.ID" class="btn btn-white btn-sm border text-warning" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a href="/Admin/Actor/Delete/@item.ID" class="btn btn-white btn-sm border text-danger btn-delete" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="text-muted">
+                                    <i class="bi bi-person-x display-1 d-block mb-3 opacity-25"></i>
+                                    <p class="h5">No actors found</p>
+                                    <p class="small">Try adjusting your search criteria.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @* --- FOOTER / PAGINATION --- *@
+         <div class="card-footer bg-white border-top-0 py-3">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-muted small text-center text-md-start mb-3 mb-md-0">
+                    @{
+                        var pageSize = 10; // Match your controller's logic
+                        var start = ((Model.CurrentPage - 1) * pageSize) + 1;
+                        var totalItems = Model.totalPages * pageSize; // Ideally pass TotalCount in VM
+                    }
+                    Showing <strong>@start</strong> to <strong>@(start + Model.Actors.Count() - 1)</strong> entries
+                </div>
+                <div class="col-md-6">
+                    @if (Model.totalPages > 1)
+                    {
+                        var query = Context.Request.Query["query"];
+                        var sort = Context.Request.Query["sort"];
+
+                        <nav>
+                            <ul class="pagination pagination-sm justify-content-center justify-content-md-end mb-0">
+                                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                                    <a class="page-link" href="?page=@(Model.CurrentPage - 1)&query=@query&sort=@sort">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+
+                                @for (var i = 1; i <= Model.totalPages; i++)
+                                {
+                                    <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                                        <a class="page-link" href="?page=@i&query=@query">@i</a>
+                                    </li>
+                                }
+
+                                <li class="page-item @(Model.CurrentPage == Model.totalPages ? "disabled" : "")">
+                                    <a class="page-link" href="?page=@(Model.CurrentPage + 1)&query=@query">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,.02);
+        transition: background-color 0.2s ease;
+    }
+    .page-link { color: #6c757d; border: none; margin: 0 2px; border-radius: 4px !important; }
+    .page-item.active .page-link { background-color: #0d6efd; color: white; }
+    .btn-white { background: white; }
+    .sticky-top { box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Optimized Event Delegation for Delete
+            document.body.addEventListener("click", function (e) {
+                const deleteBtn = e.target.closest(".btn-delete");
+                if (!deleteBtn) return;
+
+                e.preventDefault();
+                const url = deleteBtn.getAttribute("href");
+
+                Swal.fire({
+                    title: "Delete Cinema?",
+                    text: "This will permanently remove the actor record. Movie associations will be affected.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dc3545",
+                    cancelButtonColor: "#6c757d",
+                    confirmButtonText: "Yes, Delete",
+                    cancelButtonText: "Cancel",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Processing...",
+                            allowOutsideClick: false,
+                            didOpen: () => { Swal.showLoading(); }
+                        });
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+}

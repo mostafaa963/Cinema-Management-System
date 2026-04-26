@@ -1,0 +1,186 @@
+﻿@model CMoviesVM 
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Movie Management</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Home">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/Admin/Movie">Movies</a></li>
+        <li class="breadcrumb-item active">Add New Movie</li>
+    </ol>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow border-0 mb-5">
+                <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between py-3">
+                    <div class="fw-bold fs-5"><i class="fas fa-film me-2 text-warning"></i>Register New Movie</div>
+                    <a href="/Admin/Movie" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-4 border-end text-center">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold d-block">Main Movie Poster</label>
+                                    <div id="imagePreviewContainer" class="bg-light d-flex align-items-center justify-content-center mx-auto rounded shadow-sm mb-3" style="width: 200px; height: 300px; border: 2px dashed #dee2e6; overflow: hidden;">
+                                        <i id="placeholderIcon" class="fas fa-image fa-4x text-muted"></i>
+                                        <img id="imgPreview" src="#" alt="Preview" class="d-none w-100 h-100" style="object-fit: cover;" />
+                                    </div>
+                                </div>
+                                <div class="mb-3 px-2">
+                                    <input type="file" class="form-control form-control-sm" name="MainImg" id="PosterInput" accept="image/*" required>
+                                    <div class="form-text small">Upload main poster image</div>
+                                </div>
+
+                                <div class="mt-4 text-start">
+                                    <label class="form-label fw-bold small text-muted text-uppercase">Sub-Images Gallery</label>
+                                    <input type="file" class="form-control form-control-sm" id="SubImagesInput" name="SubImg" multiple accept="image/*">
+                                    <div id="subImagePreviewContainer" class="row g-2 mt-2"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="Name" class="form-label fw-bold">Movie Title</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-heading text-primary"></i></span>
+                                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter movie name" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="Price" class="form-label fw-bold">Ticket Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-dollar-sign text-success"></i></span>
+                                            <input type="number" step="0.01" class="form-control" id="Price" name="Price" placeholder="0.00" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="Date" class="form-label fw-bold">Release Date</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-calendar-alt text-danger"></i></span>
+                                            <input type="date" class="form-control" id="Date" name="Date" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="CinemaId" class="form-label fw-bold">Cinema</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-building text-info"></i></span>
+                                            <select class="form-select" id="CinemaId" name="CinemaId" required>
+                                                <option value="">Select Cinema...</option>
+                                                @foreach(var cinema in Model.Cinemas) {
+                                                    <option value="@cinema.ID">@cinema.CinemaName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="CategoryId" class="form-label fw-bold">Category (Home)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-th-large text-secondary"></i></span>
+                                            <select class="form-select" id="CategoryId" name="CategoryId" required>
+                                                <option value="">Select Category...</option>
+                                                @foreach(var cat in Model.Categories) {
+                                                    <option value="@cat.ID">@cat.HomeName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                  @*   <div class="col-12">
+                                        <label for="ActorIds" class="form-label fw-bold">Cast / Actors</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-users text-warning"></i></span>
+                                            <select class="form-select" id="ActorIds" name="ActorIds" multiple style="height: 120px;">
+                                                @foreach(var actor in Model.Actors) {
+                                                    <option value="@actor.ID">@actor.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <small class="text-muted">Hold Ctrl (or Cmd) to select multiple actors.</small>
+                                    </div> *@
+
+                                    <div class="col-12">
+                                        <label for="Description" class="form-label fw-bold">Description / Synopsis</label>
+                                        <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="Enter movie plot summary..."></textarea>
+                                    </div>
+
+                                    <div class="col-12 mt-3">
+                                        <div class="form-check form-switch custom-switch">
+                                            <input class="form-check-input" type="checkbox" id="Status" name="Status" value="true" checked>
+                                            <label class="form-check-label fw-bold" for="Status">Available (Active Status)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="reset" class="btn btn-light border px-4" id="btnReset">Clear Form</button>
+                            <button type="submit" class="btn btn-primary px-5 shadow">
+                                <i class="fas fa-plus-circle me-1"></i> Create Movie
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card { border-radius: 12px; }
+    .card-header { border-radius: 12px 12px 0 0 !important; }
+    .input-group-text { border-right: 0; color: #495057; width: 45px; justify-content: center; }
+    .input-group .form-control, .input-group .form-select { border-left: 0; }
+    .input-group .form-control:focus, .input-group .form-select:focus { border-color: #dee2e6; box-shadow: none; border-left: 0; }
+    .custom-switch .form-check-input { width: 3em; height: 1.5em; cursor: pointer; }
+    textarea.form-control { border-radius: 8px; }
+    .gallery-preview-item { width: 65px; height: 65px; object-fit: cover; border-radius: 6px; border: 1px solid #dee2e6; }
+</style>
+
+<script>
+    // 1. Poster Preview
+    document.getElementById('PosterInput').onchange = evt => {
+        const [file] = evt.target.files;
+        if (file) {
+            const imgPreview = document.getElementById('imgPreview');
+            const placeholderIcon = document.getElementById('placeholderIcon');
+            imgPreview.src = URL.createObjectURL(file);
+            imgPreview.classList.remove('d-none');
+            placeholderIcon.classList.add('d-none');
+        }
+    }
+
+    // 2. Gallery Preview
+    document.getElementById('SubImagesInput').onchange = function() {
+        const container = document.getElementById('subImagePreviewContainer');
+        container.innerHTML = ""; 
+        if (this.files) {
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const col = document.createElement('div');
+                    col.className = 'col-auto';
+                    col.innerHTML = `<img src="${e.target.result}" class="gallery-preview-item shadow-sm">`;
+                    container.appendChild(col);
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    // 3. Reset Button Fix
+    document.getElementById('btnReset').onclick = () => {
+        document.getElementById('imgPreview').classList.add('d-none');
+        document.getElementById('placeholderIcon').classList.remove('d-none');
+        document.getElementById('subImagePreviewContainer').innerHTML = "";
+    }
+</script>

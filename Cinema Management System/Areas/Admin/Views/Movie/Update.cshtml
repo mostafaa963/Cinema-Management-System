@@ -1,0 +1,135 @@
+﻿@model UpdateMoviesVM
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Edit Movie</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Home">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/Admin/Movie">Movies</a></li>
+        <li class="breadcrumb-item active">Update Movie: @Model.movie.Name</li>
+    </ol>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow border-0 mb-5">
+                <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between py-3">
+                    <div class="fw-bold fs-5"><i class="fas fa-edit me-2 text-warning"></i>Update Movie Details</div>
+                    <a href="/Admin/Movie" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-arrow-left me-1"></i> Back to List
+                    </a>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="Id" value="@Model.movie.Id" />
+
+                        <div class="row">
+                            <div class="col-md-4 border-end text-center">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold d-block">Current Movie Poster</label>
+                                    <div id="imagePreviewContainer" class="bg-light d-flex align-items-center justify-content-center mx-auto rounded shadow-sm mb-3" style="width: 200px; height: 300px; border: 2px dashed #dee2e6; overflow: hidden;">
+                                        
+                                        @if (Model.movie.MainImg is not null)
+                                        {
+                                            <img id="imgPreview" src="~/images/admin_layout/@Model.movie.MainImg" alt="Preview" class="w-100 h-100" style="object-fit: cover;" />
+                                            <i id="placeholderIcon" class="fas fa-image fa-4x text-muted d-none"></i>
+                                        }
+                                        else
+                                        {
+                                            <i id="placeholderIcon" class="fas fa-image fa-4x text-muted"></i>
+                                            <img id="imgPreview" src="#" alt="Preview" class="d-none w-100 h-100" style="object-fit: cover;" />
+                                        }
+                                    </div>
+                                </div>
+                                <div class="mb-3 px-2">
+                                    <input type="file" class="form-control form-control-sm" name="MainImg" id="PosterInput" accept="image/*">
+                                    <div class="form-text small">Upload new to change, leave blank to keep current</div>
+                                </div>
+
+                                <div class="mt-4 text-start">
+                                    <label class="form-label fw-bold small text-muted text-uppercase">Update Gallery</label>
+                                    <input type="file" class="form-control form-control-sm" id="SubImagesInput" name="SubImg" multiple accept="image/*">
+                                    <div id="subImagePreviewContainer" class="row g-2 mt-2">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label for="Name" class="form-label fw-bold">Movie Title</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-heading text-primary"></i></span>
+                                            <input type="text" class="form-control" id="Name" name="Name" value="@Model.movie.Name" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="Price" class="form-label fw-bold">Ticket Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-dollar-sign text-success"></i></span>
+                                            <input type="number" step="0.01" class="form-control" id="Price" name="Price" value="@Model.movie.Price" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="Date" class="form-label fw-bold">Release Date</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-calendar-alt text-danger"></i></span>
+                                            <input type="date" class="form-control" id="Date" name="Date" value="@Model.movie.Date.ToString("yyyy-MM-dd")" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="CinemaId" class="form-label fw-bold">Cinema</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-building text-info"></i></span>
+                                            <select class="form-select" id="CinemaId" name="CinemaId" required>
+                                                @foreach (var cinema in Model.Cinemas)
+                                                {
+                                                    <option value="@cinema.ID" selected="@(cinema.ID == Model.movie.CinemaID)">@cinema.CinemaName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="CategoryId" class="form-label fw-bold">Category</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-white"><i class="fas fa-th-large text-secondary"></i></span>
+                                            <select class="form-select" id="CategoryId" name="CategoryId" required>
+                                                @foreach (var cat in Model.Categories)
+                                                {
+                                                    <option value="@cat.ID" selected="@(cat.ID == Model.movie.HomeId)">@cat.HomeName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="Description" class="form-label fw-bold">Description / Synopsis</label>
+                                        <textarea class="form-control" id="Description" name="Description" rows="3">@Model.movie.Description</textarea>
+                                    </div>
+
+                                    <div class="col-12 mt-3">
+                                        <div class="form-check form-switch custom-switch">
+                                            <input class="form-check-input" type="checkbox" id="Status" name="Status" value="true" @(Model.movie.Status ? "checked" : "")>
+                                            <label class="form-check-label fw-bold" for="Status">Available (Active Status)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="/Admin/Movie" class="btn btn-light border px-4">Cancel</a>
+                            <button type="submit" class="btn btn-warning px-5 shadow fw-bold">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
