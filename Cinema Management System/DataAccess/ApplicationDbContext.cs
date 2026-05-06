@@ -6,9 +6,14 @@ namespace Cinema_Management_System.DataAccess
 {
     public class ApplicationDbContext:DbContext  
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+       : base(options)
         {
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=CinemaBD;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;");
+        }
+        public ApplicationDbContext()
+        {
+                
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,7 @@
 ﻿@model Cinema
-
+@section Scripts{
+ <partial name="_ValidationScriptsPartial">
+}
 <div class="container-fluid px-4">
     <h1 class="mt-4">Cinema Management</h1>
     <ol class="breadcrumb mb-4">
@@ -31,8 +33,9 @@
                                         <label for="Name" class="form-label fw-bold">Full Name</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light"><i class="fas fa-user"></i></span>
-                                            <input type="text" class="form-control" id="Name" name="CinemaName" 
-                                                   placeholder="e.g. Robert Downey Jr." value="@Model.CinemaName" required>
+                                            <input type="text" class="form-control" id="Name" asp-for="@Model.CinemaName" 
+                                                   placeholder="e.g. Robert Downey Jr."  required>
+                                                    <span asp-validation-for="@Model.CinemaName" class="text-danger"></span>
                                         </div>
                                     </div>
 
@@ -40,8 +43,9 @@
                                         <label for="Nationality" class="form-label fw-bold">Location</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light"><i class="fas fa-globe"></i></span>
-                                            <input type="text" class="form-control" id="Nationality" name="Location" 
-                                                   placeholder="e.g. American" value="@Model.Location">
+                                            <input type="text" class="form-control" id="Nationality" asp-for="@Model.Location" 
+                                                   placeholder="e.g. American" >
+                                                   <span asp-validation-for="@Model.Location" class="text-danger"></span>
                                         </div>
                                     </div>
 

@@ -1,10 +1,10 @@
 ﻿using Cinema_Management_System.Models;
 
-namespace Cinema_Management_System
+namespace Cinema_Management_System.ViewModel
 {
-    public class CategoryWithRelatedVM
+    public class ActorWithRelatedVM
     {
-        public IEnumerable<Category> categories { get; set; }
+        public IEnumerable<Actor> Actors { get; set; }
         public int totalPages { get; set; }
         public int CurrentPage { get; set; }
     }

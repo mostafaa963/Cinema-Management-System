@@ -1,4 +1,8 @@
-﻿<div class="container-fluid px-4">
+﻿@model Cinema
+@section Scripts{
+ <partial name="_ValidationScriptsPartial">
+}
+<div class="container-fluid px-4">
     <h1 class="mt-4">Cinema Management</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/Admin/Home">Dashboard</a></li>
@@ -44,7 +48,8 @@
                                         <label for="Name" class="form-label fw-bold">Full Name</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-id-card text-primary"></i></span>
-                                            <input type="text" class="form-control" id="Name" name="CinemaName" placeholder="e.g. Leonardo DiCaprio" required>
+                                            <input type="text" class="form-control" id="Name" asp-for="@Model.CinemaName" placeholder="e.g. Leonardo DiCaprio" required>
+                                            <span asp-validation-for="@Model.CinemaName" class="text-danger"></span>
                                         </div>
                                     </div>
 
@@ -52,7 +57,8 @@
                                         <label for="Nationality" class="form-label fw-bold">Location</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-globe-americas text-success"></i></span>
-                                            <input type="text" class="form-control" id="Nationality" name="Location" placeholder="e.g. British">
+                                            <input type="text" class="form-control" id="Nationality" asp-for="@Model.Location" placeholder="e.g. British">
+                                            <span asp-validation-for="@Model.Location" class="text-danger"></span>
                                         </div>
                                     </div>
 

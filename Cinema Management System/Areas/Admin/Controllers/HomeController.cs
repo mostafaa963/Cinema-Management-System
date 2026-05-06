@@ -1,5 +1,6 @@
 ﻿using Cinema_Management_System.DataAccess;
 using Cinema_Management_System.Utilities;
+using Cinema_Management_System.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema_Management_System.Areas.Admin.Controllers
@@ -8,9 +9,9 @@ namespace Cinema_Management_System.Areas.Admin.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public HomeController()
+        public HomeController(ApplicationDbContext db)
         {
-            _db = new ApplicationDbContext();
+            _db = db;
         }
         public IActionResult Index()
         {

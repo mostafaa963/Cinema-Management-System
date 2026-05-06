@@ -1,5 +1,7 @@
 ﻿@model Actor
-
+@section Scripts{
+ <partial name="_ValidationScriptsPartial">
+}
 <div class="container-fluid px-4">
     <h1 class="mt-4">Actor Management</h1>
     <ol class="breadcrumb mb-4">
@@ -31,18 +33,20 @@
                                         <label for="Name" class="form-label fw-bold">Full Name</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light"><i class="fas fa-user"></i></span>
-                                            <input type="text" class="form-control" id="Name" name="Name" 
-                                                   placeholder="e.g. Robert Downey Jr." value="@Model.Name" required>
+                                            <input type="text" class="form-control" id="Name" asp-for="@Model.Name"
+                                                   placeholder="e.g. Robert Downey Jr." required>
                                         </div>
+                                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label for="Nationality" class="form-label fw-bold">Nationality</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light"><i class="fas fa-globe"></i></span>
-                                            <input type="text" class="form-control" id="Nationality" name="Nationality" 
-                                                   placeholder="e.g. American" value="@Model.Nationality">
+                                            <input type="text" class="form-control" id="Nationality"  
+                                                   placeholder="e.g. American" asp-for="@Model.Nationality">
                                         </div>
+                                             <span asp-validation-for="@Model.Nationality" class="text-danger"></span>
                                     </div>
 
                                     <div class="col-md-6">
@@ -51,6 +55,7 @@
                                             <span class="input-group-text bg-light"><i class="fas fa-film"></i></span>
                                             <input type="number" class="form-control" id="MovieID" name="MovieID" 
                                                    value="@Model.MovieID">
+                                                    
                                         </div>
                                     </div>
 
@@ -65,7 +70,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4 border-start text-center">
+                            <div class="col-md-4 border-start text-center"
                                 <label class="form-label fw-bold d-block">Profile Picture</label>
                                 <div class="mb-3">
                                     

@@ -1,4 +1,8 @@
-﻿@model IEnumerable<Movie>
+﻿@model CreateActorViewModel
+
+@section Scripts{
+ <partial name="_ValidationScriptsPartial">
+}
 <div class="container-fluid px-4">
     <h1 class="mt-4">Actor Management</h1>
     <ol class="breadcrumb mb-4">
@@ -28,6 +32,7 @@
                                 <div class="mb-3 px-3">
                                     <input type="file" class="form-control form-control-sm" name="logo" id="ProfilePicture">
                                     <div class="form-text small">Upload JPG or PNG (Max 2MB)</div>
+                                    @* <span asp-validation-for="@Model.Actor.Image" class="text-danger"></span> *@
                                 </div>
                             </div>
 
@@ -37,7 +42,9 @@
                                         <label for="Name" class="form-label fw-bold">Full Name</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-id-card text-primary"></i></span>
-                                            <input type="text" class="form-control" id="Name" name="Name" placeholder="e.g. Leonardo DiCaprio" required>
+                                            <input type="text" class="form-control" id="Name"asp-for="@Model.Actor.Name" placeholder="e.g. Leonardo DiCaprio" required>
+                                            <span asp-validation-for="@Model.Actor.Name" class="text-danger"></span>
+
                                         </div>
                                     </div>
 
@@ -45,17 +52,18 @@
                                         <label for="Nationality" class="form-label fw-bold">Nationality</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-globe-americas text-success"></i></span>
-                                            <input type="text" class="form-control" id="Nationality" name="Nationality" placeholder="e.g. British">
+                                            <input type="text" class="form-control" id="Nationality"asp-for="@Model.Actor.Nationality" placeholder="e.g. British">
+                                        <span asp-validation-for="@Model.Actor.Nationality" class="text-danger"></span>
                                         </div>
                                     </div>
 
                                      <div class="col-md-6">
-                                        <label for="CinemaId" class="form-label fw-bold">Cinema</label>
+                                        <label for="CinemaId" class="form-label fw-bold">Movies</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-building text-info"></i></span>
                                             <select class="form-select" id="MovieID" name="MovieID" required>
-                                                <option value="">Select Cinema...</option>
-                                                @foreach(var movie in Model) {
+                                                <option value="">Select Movies...</option>
+                                                @foreach(var movie in Model.Movies) {
                                                     <option value="@movie.Id">@movie.Name</option>
                                                 }
                                             </select>

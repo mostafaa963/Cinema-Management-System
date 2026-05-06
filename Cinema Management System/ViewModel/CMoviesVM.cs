@@ -1,21 +1,19 @@
 ﻿using Cinema_Management_System.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace Cinema_Management_System
+namespace Cinema_Management_System.ViewModel
 {
-    public class MovieCreateVM
+    public class CMoviesVM
     {
-        //public int Id { get; set; }
+        public IEnumerable<Cinema> Cinemas { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
+        public IEnumerable<Actor> Actors { get; set; }
+        [Required, Length(3, 100)]
         public string Name { get; set; } = string.Empty;
         //public string MainImg { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public string? Description { get; set; }
         public bool Status { get; set; }
         public DateTime Date { get; set; }
-        //public Category Home { get; set; } = null!;
-        //public List<Actor>? Actors { get; set; }
-        //public Cinema Cinema { get; set; } = null!;
-
-        public int CategoryId { get; set; }
-        public int CinemaID { get; set; }
     }
 }

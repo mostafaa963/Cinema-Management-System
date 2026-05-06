@@ -1,4 +1,4 @@
-﻿namespace Cinema_Management_System
+﻿namespace Cinema_Management_System.ViewModel
 {
     public class CountEntityVM
     {

@@ -1,5 +1,7 @@
 ﻿@model CMoviesVM 
-
+@section Scripts{
+ <partial name="_ValidationScriptsPartial">
+}
 <div class="container-fluid px-4">
     <h1 class="mt-4">Movie Management</h1>
     <ol class="breadcrumb mb-4">
@@ -46,7 +48,8 @@
                                         <label for="Name" class="form-label fw-bold">Movie Title</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-heading text-primary"></i></span>
-                                            <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter movie name" required>
+                                            <input type="text" class="form-control" id="Name"asp-for="@Model.Name" placeholder="Enter movie name" required>
+                                             <span asp-validation-for="@Model.Name" class="text-danger"></span>
                                         </div>
                                     </div>
 
@@ -54,7 +57,8 @@
                                         <label for="Price" class="form-label fw-bold">Ticket Price</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-dollar-sign text-success"></i></span>
-                                            <input type="number" step="0.01" class="form-control" id="Price" name="Price" placeholder="0.00" required>
+                                            <input type="number" step="0.01" class="form-control" id="Price"asp-for="@Model.Price" placeholder="0.00" required>
+                                            <span asp-validation-for="@Model.Price" class="text-danger"></span>
                                         </div>
                                     </div>
 
@@ -63,6 +67,7 @@
                                         <div class="input-group">
                                             <span class="input-group-text bg-white"><i class="fas fa-calendar-alt text-danger"></i></span>
                                             <input type="date" class="form-control" id="Date" name="Date" required>
+
                                         </div>
                                     </div>
 

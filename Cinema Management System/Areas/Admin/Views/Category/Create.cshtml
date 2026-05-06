@@ -1,4 +1,8 @@
-﻿<div class="container">
+﻿@model Category
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+    }
+<div class="container">
     <div class="row mb-3 align-items-center my-3">
         <div class="col-md-6">
             <h2 class="display-6">Create new Category</h2>
@@ -10,12 +14,14 @@
             <form method="post">
                 <div class="mb-3">
                     <label for="Name" class="form-label">Name</label>
-                    <input class="form-control" placeholder="Name" name="HomeName">
+                    <input class="form-control" placeholder="Name" asp-for="@Model.HomeName">
+                    <span asp-validation-for="@Model.HomeName" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <div class="form-floating">
-                        <textarea class="form-control" style="height: 100px" placeholder="Leave a Description here" id="Description" name="Description"></textarea>
+                            <textarea class="form-control" style="height: 100px" placeholder="Leave a Description here" id="Description" asp-for="@Model.Description" "></textarea>
                         <label for="Description">Description</label>
+                        <span asp-validation-for="@Model.Description" class="text-danger"></span>
                     </div>
                 </div>
                 @* <div class="mb-3">
@@ -31,7 +37,7 @@
                             Active / In Active
                         </label>
                     </div>  *@
-                @* </div> *@ 
+                @* </div> *@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>

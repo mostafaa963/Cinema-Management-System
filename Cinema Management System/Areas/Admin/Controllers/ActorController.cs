@@ -1,7 +1,10 @@
 ﻿using Cinema_Management_System.DataAccess;
 using Cinema_Management_System.Models;
+using Cinema_Management_System.Repositories;
+using Cinema_Management_System.Repositories.IRepositories;
 using Cinema_Management_System.Service;
 using Cinema_Management_System.Utilities;
+using Cinema_Management_System.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,20 +13,28 @@ namespace Cinema_Management_System.Areas.Admin.Controllers
     [Area(SD.ADMIN_AREA)]
     public class ActorController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        //private readonly ApplicationDbContext _db;
+        private readonly IRepository<Actor> _actor;
+        private readonly IRepository<Movie> _movie;
         private readonly ActorServics actorServics;
-        public ActorController()
+        public ActorController(IRepository<Actor> actor, IRepository<Movie> movie)
         {
-            _db = new ApplicationDbContext();
+            //_db = new ApplicationDbContext();
             actorServics = new ActorServics();
+            //_actor = new Repository<Actor>();
+            //_movie = new Repository<Movie>();
+            _actor = actor;
+            _movie = movie;
         }
-        public IActionResult Index(int page = 1, string? query = null)
+        public async Task<IActionResult>  Index(int page = 1, string? query = null,CancellationToken _cancellationToken=default) 
         {
-            var actor = _db.Actors.AsEnumerable();
+            //var actor = _db.Actors.AsEnumerable();
+            var actor = await _actor.GetAsync(cancellationToken: _cancellationToken);
             if (query is not null)
             {
                 ViewBag.Query = query;
-                actor = actor.Where(e => e.Name.Contains(query.Trim()));
+                actor = await _actor.GetAsync(expression: e => e.Name.Contains(query.Trim()), cancellationToken: _cancellationToken);
+                //actor = actor.Where(e => e.Name.Contains(query.Trim()));
             }
             int totalPages = (int)Math.Ceiling(actor.Count() / 5.0);
             actor = actor.Skip((page - 1) * 5).Take(5);
@@ -35,14 +46,25 @@ namespace Cinema_Management_System.Areas.Admin.Controllers
             });
         }
         [HttpGet]
-        public IActionResult Create()
+        public  async Task<IActionResult> Create( CancellationToken cancellation)
         {
-            var movie = _db.Movies.AsQueryable();
-            return View(movie.AsEnumerable());
+            //var movie = _db.Movies.AsQueryable();
+            var movie = await _movie.GetAsync(cancellationToken: cancellation);
+            return View( new CreateActorViewModel{
+            Movies= await _movie.GetAsync(cancellationToken: cancellation),
+            Actor=new Actor()
+            });
         }
         [HttpPost]
-        public IActionResult Create(Actor? actor, IFormFile logo)
+        public async Task<IActionResult> Create(Actor? actor, IFormFile logo, CancellationToken cancellation)
         {
+            if (!ModelState.IsValid)
+                return View(new CreateActorViewModel
+                {
+                    Movies = await _movie.GetAsync(cancellationToken: cancellation),
+                    Actor = actor
+
+                });
             if (logo is not null && logo.Length > 0)
             {
 
@@ -58,21 +80,27 @@ namespace Cinema_Management_System.Areas.Admin.Controllers
                 return NotFound();
             if (actor is not null)
             {
-                _db.Actors.Add(actor);
-                _db.SaveChanges();
+                //_db.Actors.Add(actor);
+                await _actor.CreateAsync(actor,cancellationToken: cancellation);
+                await _actor.CommitAsync(cancellationToken: cancellation);
+                
             }
+            TempData["success_notification"] = "Add Actor a successfully";
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id, CancellationToken cancellationToken)
         {
-            var actor = _db.Actors.FirstOrDefault(e => e.ID == id);
+            //var actor = _db.Actors.FirstOrDefault(e => e.ID == id);
+            var actor = (await _actor.GetAsync(cancellationToken : cancellationToken)).FirstOrDefault(e => e.ID == id);
             return View(actor);
         }
         [HttpPost]
-        public IActionResult Update(Actor actor, IFormFile? logo)
+        public async Task<IActionResult> Update(Actor actor, IFormFile? logo,CancellationToken cancellation)
         {
-            var actorDb = _db.Actors.AsNoTracking().SingleOrDefault(e => e.ID == actor.ID);
+            if (!ModelState.IsValid)
+                return View(actor);
+            var actorDb = (await _actor.GetAsync(cancellationToken: cancellation,tracked:false)).SingleOrDefault(e => e.ID == actor.ID);
 
             if (actorDb is null) return NotFound();
 
@@ -93,20 +121,21 @@ namespace Cinema_Management_System.Areas.Admin.Controllers
                 return NotFound();
             if (actor is not null)
             {
-                _db.Actors.Update(actor);
-                _db.SaveChanges();
+                _actor.Update(actor);
+                await _actor.CommitAsync(cancellationToken: cancellation);
             }
+            TempData["success_notification"] = "Update Actor a successfully";
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id,CancellationToken cancellation)
         {
-            var actor = _db.Actors.SingleOrDefault(e => e.ID == id);
+            var actor = (await _actor.GetAsync(cancellationToken: cancellation, tracked: false)).SingleOrDefault(e => e.ID == id);
 
             if (actor is null) return NotFound();
             if (actorServics.RemoveImg(actor.Image))
             {
-                _db.Actors.Remove(actor);
-                _db.SaveChanges();
+                _actor.Delete(actor);
+                await _actor.CommitAsync(cancellationToken: cancellation);
 
                 TempData["success_notification"] = "Delete Actor Successfully";
             }
