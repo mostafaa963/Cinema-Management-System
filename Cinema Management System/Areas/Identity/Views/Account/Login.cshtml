@@ -1,0 +1,75 @@
+﻿@model Cinema_Management_System.ViewModel.LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0"><i class="bi bi-person-circle"></i> Welcome Back</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="EmailORUserName" class="form-label font-weight-bold">Email or Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="EmailORUserName" class="form-control" placeholder="Enter email or username" />
+                            </div>
+                            <span asp-validation-for="EmailORUserName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label font-weight-bold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="RememberMe" />
+                                    <label class="form-check-label" asp-for="RememberMe">
+                                        @Html.DisplayNameFor(model => model.RememberMe)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col text-end">
+                                <a href="#" class="small text-decoration-none">Forgot Password?</a>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center bg-light py-3">
+                    <span class="text-muted">Don't have an account?</span>
+                    <a asp-action="Register" class="text-primary fw-bold text-decoration-none">Register here</a>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a asp-action="Index" class="text-secondary small text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <partial name="_NotificationPartial">
+}

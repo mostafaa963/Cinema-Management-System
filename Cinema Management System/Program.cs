@@ -2,9 +2,13 @@ using Cinema_Management_System.DataAccess;
 using Cinema_Management_System.Models;
 using Cinema_Management_System.Repositories;
 using Cinema_Management_System.Repositories.IRepositories;
+using Cinema_Management_System.Utilities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.CodeAnalysis.Operations;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 namespace Cinema_Management_System
 {
@@ -24,11 +28,22 @@ namespace Cinema_Management_System
             builder.Services.AddDbContext<ApplicationDbContext>(option =>
             option.UseSqlServer(connectionString));
 
+           builder.Services.AddIdentity<ApplicationUser,IdentityRole>(option=>
+           { 
+               //option.SignIn.RequireConfirmedPhoneNumber= true;
+               option.SignIn.RequireConfirmedEmail= true;
+               option.Password.RequiredLength= 8;
+           }).AddEntityFrameworkStores<ApplicationDbContext>()
+           .AddDefaultTokenProviders();
+
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
             builder.Services.AddScoped<IRepository<Movie>, Repository<Movie>>();
             builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
             builder.Services.AddScoped<IRepository<Actor>, Repository<Actor>>();
             builder.Services.AddScoped<IRepositorySubImage, RepositorySubImage>();
+            //builder.Services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
+            //builder.Services.AddScoped<IRepository<IdentityUser>, Repository<IdentityUser>>();
 
             var app = builder.Build();
 

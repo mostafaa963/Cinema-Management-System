@@ -8,6 +8,7 @@
     <UserSecretsId>fa739ba3-2df9-4f8a-ab30-6ee4615ba2af</UserSecretsId>
   </PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.6">

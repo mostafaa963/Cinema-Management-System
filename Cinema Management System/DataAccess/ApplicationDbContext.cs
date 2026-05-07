@@ -1,10 +1,13 @@
 ﻿using Cinema_Management_System.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using Cinema_Management_System.ViewModel;
 
 namespace Cinema_Management_System.DataAccess
 {
-    public class ApplicationDbContext:DbContext  
+    public class ApplicationDbContext:IdentityDbContext <ApplicationUser> 
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -25,7 +28,7 @@ namespace Cinema_Management_System.DataAccess
                     e.Property(e => e.Price).HasPrecision(13, 3);
                     //e.Property(e => e.).HasMaxLength(255);/
                 }
-                );
+                );  
             modelBuilder.Entity<Actor>(
                 e =>
                 {
@@ -59,5 +62,7 @@ namespace Cinema_Management_System.DataAccess
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<MoviesSubimage> MoviesSubimages { get; set; }
+        public DbSet<Cinema_Management_System.ViewModel.RegisterVM> RegisterVM { get; set; } = default!;
+        public DbSet<Cinema_Management_System.ViewModel.LoginVM> LoginVM { get; set; } = default!;
     }
 }
