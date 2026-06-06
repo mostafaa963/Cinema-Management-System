@@ -46,15 +46,17 @@ namespace Cinema_Management_System
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
-            builder.Services.AddTransient<IEmailSender, EmailSender>();
-            builder.Services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
-            builder.Services.AddScoped<IRepository<Movie>, Repository<Movie>>();
-            builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
-            builder.Services.AddScoped<IRepository<Actor>, Repository<Actor>>();
-            builder.Services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
-            builder.Services.AddScoped<IRepositorySubImage, RepositorySubImage>();
-            builder.Services.AddScoped<IAccountService, AccountService>();
-            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
+            builder.Services.Configure();
+            //builder.Services.AddTransient<IEmailSender, EmailSender>();
+            //builder.Services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
+            //builder.Services.AddScoped<IRepository<Movie>, Repository<Movie>>();
+            //builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+            //builder.Services.AddScoped<IRepository<Actor>, Repository<Actor>>();
+            //builder.Services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
+            //builder.Services.AddScoped<IRepositorySubImage, RepositorySubImage>();
+            //builder.Services.AddScoped<IAccountService, AccountService>();
+            //builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             //builder.Services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
             //builder.Services.AddScoped<IRepository<IdentityUser>, Repository<IdentityUser>>();
 
@@ -86,7 +88,7 @@ namespace Cinema_Management_System
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}")
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
