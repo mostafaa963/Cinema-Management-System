@@ -6,5 +6,6 @@
         public const string ADMIN_AREA = "Admin";
         public const string IDENTITY_AREA = "Identity";
         public const string CHAT_APP_AREA = "ChatApp";
+        public const string ACCOUNT_CONTROLER = "Account";
     }
 }

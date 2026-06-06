@@ -5,12 +5,14 @@ using Cinema_Management_System.Repositories.IRepositories;
 using Cinema_Management_System.Service;
 using Cinema_Management_System.Utilities;
 using Cinema_Management_System.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema_Management_System.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
+    [Authorize (Roles =$"{RoleNames.ADMIN},{RoleNames.CUSTOMER},{RoleNames.SUPER_ADMIN}")]
     public class ActorController : Controller
     {
         //private readonly ApplicationDbContext _db;

@@ -1,0 +1,117 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Left Column: Avatar & Summary Card -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0 text-center p-4">
+                <div class="position-relative d-inline-block mx-auto mb-3">
+                    <!-- Generic user icon placeholder -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person-circle text-secondary" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+                    </svg>
+                </div>
+                <h4 class="fw-bold mb-1">@Model.FullName</h4>
+                <p class="text-muted small mb-0">@@@Model.Username</p>
+                
+                <hr class="my-4" />
+                
+                <div class="text-start px-2">
+                    <small class="text-muted d-block mb-1">Email Address</small>
+                    <span class="fw-semibold text-break">@Model.Email</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Navigation Tabs for Info/Editing -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <ul class="nav nav-tabs card-header-tabs" id="profileTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active fw-semibold text-dark" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link fw-semibold text-dark" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button" role="tab">Edit Profile</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card-body p-4">
+                    <div class="tab-content" id="profileTabContent">
+                        
+                        <!-- Tab 1: Overview (Read-Only Mode) -->
+                        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                            <h5 class="mb-4 fw-bold text-secondary">Account Details</h5>
+                            <div class="row g-4">
+                                <div class="col-sm-6">
+                                    <label class="text-muted small d-block mb-1">Full Name</label>
+                                    <p class="border-bottom pb-2 fw-medium">@Model.FullName</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted small d-block mb-1">Username</label>
+                                    <p class="border-bottom pb-2 fw-medium">@Model.Username</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted small d-block mb-1">Email Address</label>
+                                    <p class="border-bottom pb-2 fw-medium">@Model.Email</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="text-muted small d-block mb-1">Phone Number</label>
+                                    <p class="border-bottom pb-2 fw-medium">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "Not Provided" : Model.PhoneNumber)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Edit Details Form -->
+                        <div class="tab-pane fade" id="edit" role="tabpanel">
+                            <h5 class="mb-4 fw-bold text-secondary">Update Information</h5>
+                            
+                            <form asp-action="UpdateProfile" asp-controller="Profile" method="post">
+                                <!-- Hidden field to keep track of the active user ID -->
+                                <input type="hidden" asp-for="UserId" />
+                                <input type="hidden" asp-for="Username" /> <!-- Often kept hidden if changing usernames isn't allowed -->
+                                <span asp-validation-summary="All" class="text-danger small"></span>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="FullName" class="form-label small fw-semibold">Full Name</label>
+                                        <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
+                                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label asp-for="Email" class="form-label small fw-semibold">Email Address</label>
+                                        <input asp-for="Email" class="form-control" type="email" placeholder="name@example.com" />
+                                        <span asp-validation-for="Email" class="text-danger small"></span>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label asp-for="PhoneNumber" class="form-label small fw-semibold">Phone Number</label>
+                                        <input asp-for="PhoneNumber" class="form-control" type="tel" placeholder="Enter phone number" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-2">
+                                    <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Includes jQuery validation scripts for seamless client-side feedback -->
+    <partial name="_ValidationScriptsPartial" />
+}

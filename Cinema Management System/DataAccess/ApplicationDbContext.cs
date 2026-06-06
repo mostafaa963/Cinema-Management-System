@@ -62,7 +62,11 @@ namespace Cinema_Management_System.DataAccess
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<MoviesSubimage> MoviesSubimages { get; set; }
-        public DbSet<Cinema_Management_System.ViewModel.RegisterVM> RegisterVM { get; set; } = default!;
-        public DbSet<Cinema_Management_System.ViewModel.LoginVM> LoginVM { get; set; } = default!;
+        public DbSet<ApplicationUserOTP> userOTPs { get; set; } = default!;
+        public DbSet<Cinema_Management_System.ViewModel.ResendEmailConfirmationVM> ResendEmailConfirmationVM { get; set; } = default!;
+        public DbSet<Cinema_Management_System.ViewModel.ForgetPasswordVM> ForgetPasswordVM { get; set; } = default!;
+        public DbSet<Cinema_Management_System.ViewModel.VlidateOTPVM> VlidateOTPVM { get; set; } = default!;
+        public DbSet<Cinema_Management_System.ViewModel.NewPasswordVM> NewPasswordVM { get; set; } = default!;
+        //public DbSet<Cinema_Management_System.ViewModel.LoginVM> LoginVM { get; set; } = default!;
     }
 }
