@@ -1,6 +1,8 @@
-﻿@{
+﻿@model IEnumerable<Movie>
+@{
     ViewData["Title"] = "Cinema Home - Static Preview";
 }
+
 
 <style>
     body {
@@ -45,81 +47,35 @@
 
     <h3 class="text-white border-bottom border-secondary pb-2 mb-4">Now Showing</h3>
     <div class="row mb-5">
-        
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card movie-card h-100 text-white shadow">
-                <div class="row g-0 h-100">
-                    <div class="col-4">
-                        <img src="https://placehold.co/300x450?text=Interstellar" class="img-fluid rounded-start h-100 w-100" style="object-fit: cover;" alt="Movie Poster">
-                    </div>
-                    <div class="col-8">
-                        <div class="card-body d-flex flex-column h-100">
-                            <h5 class="card-title text-warning fw-bold mb-1">Interstellar</h5>
-                            <span class="badge bg-secondary align-self-start mb-3">Sci-Fi / 169 min</span>
-                            
-                            <div class="mt-auto">
-                                <p class="mb-2 small text-muted text-uppercase fw-bold">Showtimes:</p>
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <button class="btn btn-outline-warning btn-sm time-btn">13:00</button>
-                                    <button class="btn btn-outline-warning btn-sm time-btn">16:30</button>
-                                    <button class="btn btn-outline-warning btn-sm time-btn">20:00</button>
+        @foreach (var item in Model)
+        {
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card movie-card h-100 text-white shadow">
+                    <div class="row g-0 h-100">
+                        <div class="col-4">
+
+                            <img src="~/images/admin_layout/@item.MainImg" class="img-fluid rounded-start h-100 w-100" style="object-fit: cover;" alt="Movie Poster">
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body d-flex flex-column h-100">
+                                <h5 class="card-title text-warning fw-bold mb-1">@item.Name</h5>
+                                <span class="badge bg-secondary align-self-start mb-3">@item.Home.HomeName</span>
+
+                                <div class="mt-auto">
+                                    <p class="mb-2 small text-muted text-uppercase fw-bold">Showtimes:</p>
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <a class = "btn btn-outline-warning btn-sm time-btn" href="Customer/Home/Details/@item.Id">Details</a>
+                                        <button class="btn btn-outline-warning btn-sm time-btn">13:00</button>
+                                        <button class="btn btn-outline-warning btn-sm time-btn">16:30</button>
+                                        <button class="btn btn-outline-warning btn-sm time-btn">20:00</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card movie-card h-100 text-white shadow">
-                <div class="row g-0 h-100">
-                    <div class="col-4">
-                        <img src="https://placehold.co/300x450?text=The+Dark+Knight" class="img-fluid rounded-start h-100 w-100" style="object-fit: cover;" alt="Movie Poster">
-                    </div>
-                    <div class="col-8">
-                        <div class="card-body d-flex flex-column h-100">
-                            <h5 class="card-title text-warning fw-bold mb-1">The Dark Knight</h5>
-                            <span class="badge bg-secondary align-self-start mb-3">Action / 152 min</span>
-                            
-                            <div class="mt-auto">
-                                <p class="mb-2 small text-muted text-uppercase fw-bold">Showtimes:</p>
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <button class="btn btn-outline-warning btn-sm time-btn">14:15</button>
-                                    <button class="btn btn-outline-warning btn-sm time-btn">18:00</button>
-                                    <button class="btn btn-outline-warning btn-sm time-btn">21:45</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-6 mb-4">
-            <div class="card movie-card h-100 text-white shadow">
-                <div class="row g-0 h-100">
-                    <div class="col-4">
-                        <img src="https://placehold.co/300x450?text=Inception" class="img-fluid rounded-start h-100 w-100" style="object-fit: cover;" alt="Movie Poster">
-                    </div>
-                    <div class="col-8">
-                        <div class="card-body d-flex flex-column h-100">
-                            <h5 class="card-title text-warning fw-bold mb-1">Inception</h5>
-                            <span class="badge bg-secondary align-self-start mb-3">Thriller / 148 min</span>
-                            
-                            <div class="mt-auto">
-                                <p class="mb-2 small text-muted text-uppercase fw-bold">Showtimes:</p>
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <button class="btn btn-outline-warning btn-sm time-btn">15:00</button>
-                                    <button class="btn btn-outline-warning btn-sm time-btn">19:30</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        }
     </div>
 
     <div class="row justify-content-center">

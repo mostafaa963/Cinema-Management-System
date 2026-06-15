@@ -110,7 +110,7 @@ namespace Cinema_Management_System.Areas.Identity.Controllers
         public IActionResult Login()
         {
             if (_accountService.IsLogined(User))
-                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = SD.ADMIN_AREA });
+                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = SD.CUSTOMER_AREA });
             return View();
         }
         [HttpPost]
@@ -147,7 +147,7 @@ namespace Cinema_Management_System.Areas.Identity.Controllers
             }
 
             TempData["success_notification"] = $"Welcome Back {user.FirstName} {user.LastName}";
-            return RedirectToAction(nameof(HomeController.Index), "Home", new { area = SD.ADMIN_AREA });
+            return RedirectToAction(nameof(HomeController.Index), "Home", new { area = SD.CUSTOMER_AREA });
         }
         [HttpGet]
         public IActionResult ResendEmailConfirmation()

@@ -7,7 +7,7 @@ using Cinema_Management_System.ViewModel;
 
 namespace Cinema_Management_System.DataAccess
 {
-    public class ApplicationDbContext:IdentityDbContext <ApplicationUser> 
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -16,7 +16,7 @@ namespace Cinema_Management_System.DataAccess
         }
         public ApplicationDbContext()
         {
-                
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,7 +28,7 @@ namespace Cinema_Management_System.DataAccess
                     e.Property(e => e.Price).HasPrecision(13, 3);
                     //e.Property(e => e.).HasMaxLength(255);/
                 }
-                );  
+                );
             modelBuilder.Entity<Actor>(
                 e =>
                 {
@@ -53,6 +53,13 @@ namespace Cinema_Management_System.DataAccess
                    //e.Property(p => p.Description).HasMaxLength(255);
                }
                );
+            //modelBuilder.Entity<UserPromotionUsage>()
+            //    .HasIndex(e => e.Code).
+            //    IsUnique();
+            //modelBuilder.Entity<PromotionUserUsage>()
+            //    .HasIndex(e => e.Code).
+            //    IsUnique();
+           
 
 
 
@@ -61,12 +68,14 @@ namespace Cinema_Management_System.DataAccess
         public DbSet<Actor> Actors { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public DbSet<MoviesSubimage> MoviesSubimages { get; set; }
+        //public DbSet<UserPromotionUsage> UserPromotionUsage { get; set; }
+        public DbSet<UserPromotion> UserPromotion { get; set; }
+        public DbSet<ProductPromotion> ProductPromotion { get; set; }
+        public DbSet<PromotionUserUsage> PromotionUserUsage { get; set; }
         public DbSet<ApplicationUserOTP> userOTPs { get; set; } = default!;
-        public DbSet<Cinema_Management_System.ViewModel.ResendEmailConfirmationVM> ResendEmailConfirmationVM { get; set; } = default!;
-        public DbSet<Cinema_Management_System.ViewModel.ForgetPasswordVM> ForgetPasswordVM { get; set; } = default!;
-        public DbSet<Cinema_Management_System.ViewModel.VlidateOTPVM> VlidateOTPVM { get; set; } = default!;
-        public DbSet<Cinema_Management_System.ViewModel.NewPasswordVM> NewPasswordVM { get; set; } = default!;
+
         //public DbSet<Cinema_Management_System.ViewModel.LoginVM> LoginVM { get; set; } = default!;
     }
 }

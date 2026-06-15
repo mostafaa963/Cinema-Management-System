@@ -15,6 +15,7 @@ namespace Cinema_Management_System
         {
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
+            services.AddScoped<IRepository<Cart>, Repository<Cart>>();
             services.AddScoped<IRepository<Movie>, Repository<Movie>>();
             services.AddScoped<IRepository<Category>, Repository<Category>>();
             services.AddScoped<IRepository<Actor>, Repository<Actor>>();

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Cart>
+
+@{
+    ViewData["Title"] = "Your Ticket Cart";
+    // Sum up the TotalPrice column directly from your database records
+    double grandTotal = Model?.Sum(item => item.TotalPrice) ?? 0;
+}
+
+<div class="container my-5">
+    <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-ticket-perforated text-primary fs-2 me-2"></i>
+        <h2 class="mb-0 fw-bold">Your Cinema Cart</h2>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center py-5 border rounded bg-light shadow-sm">
+            <i class="bi bi-cart-x text-muted" style="font-size: 3.5rem;"></i>
+            <h4 class="mt-3 text-secondary fw-semibold">Your cart is empty</h4>
+            <p class="text-muted">Looks like you haven't selected any movie tickets yet.</p>
+            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-primary px-4 mt-2 shadow-sm">
+                Browse Movies & Showtimes
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <!-- Ticket Items List -->
+            <div class="col-lg-8">
+                @foreach (var item in Model)
+                {
+                    <div class="card mb-3 shadow-sm border-0 position-relative overflow-hidden">
+                        <!-- Decorative cinema ticket notch border -->
+                        <div class="position-absolute bg-white rounded-circle" style="width:20px; height:20px; top:50%; left:-10px; transform:translateY(-50%); z-index:10;"></div>
+                        <div class="position-absolute bg-white rounded-circle" style="width:20px; height:20px; top:50%; right:-10px; transform:translateY(-50%); z-index:10;"></div>
+                        
+                        <div class="row g-0 align-items-center bg-light">
+                            <!-- Ticket Main Details -->
+                            <div class="col-md-8 p-4">
+                                <span class="badge bg-primary mb-2">Cinema Ticket</span>
+                                @* Ensure your repository layer executes .Include(e => e.Movie) *@
+                                <h4 class="fw-bold text-dark mb-1">@(item.Movie?.Name ?? "Movie Title")</h4>
+                                
+                                <div class="text-muted small mb-0">
+                                    <span class="me-3">
+                                        <i class="bi bi-tag-fill me-1"></i> Rate: @item.ProductPrice.ToString("C") / ticket
+                                    </span>
+                                    <span>
+                                        <i class="bi bi-bookmarks-fill me-1"></i> Qty: <strong class="text-dark">@item.Quantity</strong>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Ticket Pricing & Removal Action -->
+                            <div class="col-md-4 p-4 text-end border-start border-2 border-white bg-white h-100 d-flex flex-column justify-content-center">
+                                <div class="mb-1 text-muted small">Subtotal</div>
+                                <div class="fs-4 fw-black text-primary mb-3">
+                                    @item.TotalPrice.ToString("C")
+                                </div>
+                                
+                                <!-- Remove Action Form -->
+                                <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                                    <input type="hidden" name="cartId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0 border-0 text-decoration-none small fw-semibold">
+                                        <i class="bi bi-trash3-fill me-1"></i> Cancel Tickets
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Order Summary Sidebar -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm bg-dark text-white p-4 sticky-top" style="top: 20px;">
+                    <h4 class="fw-bold border-bottom border-secondary pb-3 mb-4">Order Summary</h4>
+                    
+                    <div class="d-flex justify-content-between mb-3 text-light-50">
+                        <span>Selected Bookings</span>
+                        <span>@Model.Count() Show(s)</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3 text-light-50">
+                        <span>Online Service Fee</span>
+                        <span class="text-success fw-bold">FREE</span>
+                    </div>
+                    
+                    <hr class="border-secondary my-4">
+                    
+                    <div class="d-flex justify-content-between align-items-baseline mb-4">
+                        <span class="fs-5 fw-semibold">Total Amount:</span>
+                        <span class="fs-2 fw-bold text-warning">@grandTotal.ToString("C")</span>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Checkout" asp-action="Payment" class="btn btn-warning btn-lg fw-bold text-dark shadow-sm">
+                            Proceed to Checkout <i class="bi bi-credit-card-2-front-fill ms-1"></i>
+                        </a>
+                        <a asp-controller="Movies" asp-action="Index" class="btn btn-outline-light btn-sm mt-2 border-secondary text-muted">
+                            <i class="bi bi-arrow-left-short"></i> Keep Adding Movies
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
